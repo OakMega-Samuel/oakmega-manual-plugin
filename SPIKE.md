@@ -43,13 +43,13 @@ git init && git add -A && git commit -m "OakMega 手冊 plugin 與 MCP server"
 ```
 
 ```bash
-gh repo create oakmega/oakmega-manual-plugin --public --source=. --push
+gh repo create OakMega-Samuel/oakmega-manual-plugin --public --source=. --push
 ```
 
 ## 4. 在 Claude Code 驗（快，先做這個）
 
 ```bash
-claude mcp add --transport http oakmega-manual https://<你的子網域>.workers.dev/mcp
+claude mcp add --transport http oakmega-manual https://oakmega-manual-mcp.samuel-jeng.workers.dev/mcp
 ```
 
 開一個新 session，問「列出 OakMega 手冊有哪些 tool 可用」。
@@ -58,7 +58,7 @@ claude mcp add --transport http oakmega-manual https://<你的子網域>.workers
 
 1. 開 Cowork → **Customize** → **Plugins**
 2. **Personal plugins** 區塊按 `+` → **Add marketplace**
-3. 填 `oakmega/oakmega-manual-plugin`
+3. 填 `OakMega-Samuel/oakmega-manual-plugin`
 4. 安裝 `oakmega-manual`
 5. 新開一個對話，確認三個 tool（`search_manual` / `get_manual_page` /
    `list_manual_sections`）出現且可呼叫
@@ -87,3 +87,17 @@ claude mcp add --transport http oakmega-manual https://<你的子網域>.workers
 
 備援 B（固定 bearer token 走 Request headers）**不能當 Plan A**：
 該功能仍在 beta 且需向 Anthropic 申請早期存取。
+
+---
+
+## 目前狀態（2026-08-03）
+
+- Worker 已部署：`https://oakmega-manual-mcp.samuel-jeng.workers.dev`
+- Plugin repo 已推上：`OakMega-Samuel/oakmega-manual-plugin`（public）
+
+> **repo 暫時掛在個人帳號下。** `OakMega-Samuel` 在 `oakmega` org 沒有建立 repo 的權限
+> （在既有 repo 上是 push 而非 admin）。spike 驗過之後，請 org admin 把 repo transfer
+> 到 `oakmega` —— GitHub 會保留舊網址的轉址，已安裝的客戶不會斷。轉完記得回頭更新
+> 本檔與 README 裡的 marketplace 路徑。
+
+**還沒驗的就是最關鍵那一步**：在 Cowork 裝 plugin，確認三個 tool 出現且沒有跳授權畫面。

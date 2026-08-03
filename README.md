@@ -12,13 +12,13 @@
 
 1. 開啟 **Customize** → **Plugins**
 2. 在 **Personal plugins** 區塊按 `+` → **Add marketplace**
-3. 填入 `oakmega/oakmega-manual-plugin`
+3. 填入 `OakMega-Samuel/oakmega-manual-plugin`
 4. 找到 **oakmega-manual**，按 **Install**
 
 ### Claude Code
 
 ```bash
-claude plugin marketplace add oakmega/oakmega-manual-plugin
+claude plugin marketplace add OakMega-Samuel/oakmega-manual-plugin
 ```
 
 ```bash

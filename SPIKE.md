@@ -100,4 +100,39 @@ claude mcp add --transport http oakmega-manual https://oakmega-manual-mcp.samuel
 > 到 `oakmega` —— GitHub 會保留舊網址的轉址，已安裝的客戶不會斷。轉完記得回頭更新
 > 本檔與 README 裡的 marketplace 路徑。
 
-**還沒驗的就是最關鍵那一步**：在 Cowork 裝 plugin，確認三個 tool 出現且沒有跳授權畫面。
+### 已經查明的事（踩過的坑，別再踩一次）
+
+**1. `.mcp.json` 不要寫 `"type": "http"`。**
+`"type": "http"` 是 Claude Code 的寫法（官方 Notion / Figma plugin 都這樣寫），
+但桌面 app 上實際能用的 plugin 全都是「不寫 type」或 `"sse"`。已改成不寫。
+
+**2. `POST /mcp` 必須回 `text/event-stream`，不能回 `application/json`。**
+Streamable HTTP 規格兩種都允許，但桌面 app 的 connector 流程只吃 SSE。
+回純 JSON 時它**不報錯**——只是按鈕沒反應、連請求都不發，極難查。
+已改成依 `Accept` 做內容協商，`worker/test/mcp.test.js` 有三條測試釘住。
+
+比對方法：拿同一台機器上已知能用的 plugin 來對照。它們在
+`~/Library/Application Support/Claude/local-agent-mode-sessions/*/*/rpm/plugin_*/.mcp.json`。
+
+**3. Plugin 詳情頁 → Connectors 分頁的「Install」按鈕目前按了沒有作用。**
+現象：不發任何網路請求、app log 無錯誤、Worker log 全空。
+在設定與回應格式都已對齊已知可用的 connector 之後仍然如此，研判是 app 端問題。
+**繞道**：改用側邊欄的 **Customize → Connectors → Add custom connector**，直接貼網址。
+
+**4. Push 到 GitHub 後 plugin 不會自動更新。**
+App log：`github_repo_not_accessible — Automatic sync on push requires the Claude
+GitHub App to be installed on this repository.`
+每次都要手動按 Update。要自動同步就去 https://github.com/apps/claude 把 App 裝到該 repo。
+
+### 已排除的可能性
+
+Server 本身沒問題，不用再往這個方向查：
+
+- 官方 `@modelcontextprotocol/sdk` 客戶端連得上，`tools/list` 回傳三個 tool
+- `initialize` / `tools/list` / `tools/call` 線上實測皆正常
+- 回應的 Content-Type 已與已知可用的 connector 完全一致
+
+### 還沒驗的
+
+**直接加 custom connector**（側邊欄 Connectors，非 plugin 分頁）。
+這才是原本定義的 gate，也是唯一還能驗證 #402 的路徑。

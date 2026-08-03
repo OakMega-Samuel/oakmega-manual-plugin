@@ -8,12 +8,26 @@
 
 ## 安裝
 
-### Claude（Cowork / claude.ai）
+### Claude（Cowork / claude.ai / 桌面 app）
 
-1. 開啟 **Customize** → **Plugins**
-2. 在 **Personal plugins** 區塊按 `+` → **Add marketplace**
+需要兩步。**兩步都要做**——只裝 plugin 的話 Claude 知道該查手冊卻沒有工具可用。
+
+**第一步：加 connector（拿到三個 tool）**
+
+1. **Customize** → **Connectors** → **Add custom connector**
+2. 貼上 `https://oakmega-manual-mcp.samuel-jeng.workers.dev/mcp`
+
+> 走側邊欄的 **Connectors**，不要走 plugin 詳情頁裡的 Connectors 分頁——
+> 那個分頁的 Install 按鈕目前按了沒反應（詳見 SPIKE.md）。
+
+**第二步：裝 plugin（拿到 manual-lookup skill）**
+
+1. **Customize** → **Plugins**
+2. **Personal plugins** 按 `+` → **Add marketplace**
 3. 填入 `OakMega-Samuel/oakmega-manual-plugin`
 4. 找到 **oakmega-manual**，按 **Install**
+
+skill 的作用是告訴 Claude 何時該查手冊、以及不要憑記憶編造產品細節。
 
 ### Claude Code
 

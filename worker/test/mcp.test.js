@@ -9,18 +9,33 @@ const MCP_URL = 'https://example.workers.dev/mcp';
 // 所以 env 還是要給一個合法的 base url。
 const ENV = { CONTENT_BASE_URL: 'https://raw.githubusercontent.com/oakmega/oakmega-manual-content/main' };
 
-async function rpc(message) {
+/** 解析回應，SSE 與純 JSON 兩種格式都吃。 */
+function parseBody(contentType, text) {
+  if (!text) return null;
+  if (contentType?.includes('text/event-stream')) {
+    const dataLine = text.split('\n').find((line) => line.startsWith('data: '));
+    return JSON.parse(dataLine.slice(6));
+  }
+  return JSON.parse(text);
+}
+
+async function rpc(message, accept = 'application/json, text/event-stream') {
   const res = await worker.fetch(
     new Request(MCP_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream' },
+      headers: { 'Content-Type': 'application/json', Accept: accept },
       body: JSON.stringify(message),
     }),
     ENV,
     {},
   );
   const text = await res.text();
-  return { status: res.status, headers: res.headers, body: text ? JSON.parse(text) : null };
+  return {
+    status: res.status,
+    headers: res.headers,
+    contentType: res.headers.get('Content-Type'),
+    body: parseBody(res.headers.get('Content-Type'), text),
+  };
 }
 
 test('initialize 回傳協定版本、tools capability 與 instructions', async () => {
@@ -146,4 +161,51 @@ test('缺少 CONTENT_BASE_URL 時給出明確錯誤，而不是每個 tool 神�
 
   assert.equal(res.status, 500);
   assert.match((await res.json()).error, /CONTENT_BASE_URL/);
+});
+
+// --- 內容協商（曾經害 Claude 桌面 app 的 connector 裝不起來）------------------
+
+test('Accept 含 text/event-stream 時回 SSE 包裝', async () => {
+  // Claude 桌面 app 的 connector 安裝流程要 SSE。回純 JSON 的話它不報錯，
+  // 只是 Install 按鈕按下去毫無反應——連請求都不會發出來，極難查。
+  const res = await worker.fetch(
+    new Request(MCP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' }),
+    }),
+    ENV,
+    {},
+  );
+
+  assert.match(res.headers.get('Content-Type'), /text\/event-stream/);
+  assert.equal(res.headers.get('Cache-Control'), 'no-cache');
+
+  const text = await res.text();
+  assert.match(text, /^event: message\n/, 'SSE 事件必須有 event 行');
+  assert.match(text, /\n\n$/, 'SSE 事件必須以空行結尾');
+
+  const payload = JSON.parse(text.split('\n').find((l) => l.startsWith('data: ')).slice(6));
+  assert.equal(payload.result.tools.length, 3);
+});
+
+test('Accept 只有 application/json 時回純 JSON', async () => {
+  const { contentType, body } = await rpc({ jsonrpc: '2.0', id: 1, method: 'tools/list' }, 'application/json');
+
+  assert.match(contentType, /application\/json/);
+  assert.equal(body.result.tools.length, 3);
+});
+
+test('沒帶 Accept 時退回純 JSON，不會讓陽春客戶端拿到看不懂的東西', async () => {
+  const res = await worker.fetch(
+    new Request(MCP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'ping' }),
+    }),
+    ENV,
+    {},
+  );
+
+  assert.match(res.headers.get('Content-Type'), /application\/json/);
 });

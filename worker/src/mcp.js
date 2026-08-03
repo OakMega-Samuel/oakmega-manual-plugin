@@ -31,6 +31,33 @@ function json(body, init = {}) {
   });
 }
 
+/**
+ * 把單一 JSON-RPC 回應包成 SSE 事件。
+ *
+ * Streamable HTTP 規格允許 server 用 `application/json` 或 `text/event-stream` 回應，
+ * 但實務上不是每個客戶端都兩種都吃——Claude 桌面 app 的 connector 安裝流程要 SSE，
+ * 回純 JSON 的話它不會報錯，只是安裝按鈕按下去沒反應（連請求都不發）。
+ *
+ * 所以這裡做內容協商：客戶端 Accept 有 text/event-stream 就回 SSE，否則回純 JSON。
+ * 官方 SDK 兩種都接受，curl 之類的簡單客戶端則會拿到好讀的 JSON。
+ */
+function sse(body, init = {}) {
+  const payload = `event: message\ndata: ${JSON.stringify(body)}\n\n`;
+  return new Response(payload, {
+    ...init,
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      ...CORS_HEADERS,
+      ...(init.headers || {}),
+    },
+  });
+}
+
+function acceptsEventStream(request) {
+  return (request.headers.get('Accept') ?? '').includes('text/event-stream');
+}
+
 function rpcResult(id, result) {
   return { jsonrpc: '2.0', id, result };
 }
@@ -165,6 +192,7 @@ export function createMcpHandler({ serverInfo, instructions, tools }) {
       return new Response(null, { status: 202, headers: CORS_HEADERS });
     }
 
-    return json(isBatch ? responses : responses[0]);
+    const body = isBatch ? responses : responses[0];
+    return acceptsEventStream(request) ? sse(body) : json(body);
   };
 }

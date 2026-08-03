@@ -1,7 +1,6 @@
 {
   "mcpServers": {
     "oakmega-manual": {
-      "type": "http",
       "url": "https://oakmega-manual-mcp.samuel-jeng.workers.dev/mcp"
     }
   }

@@ -1,0 +1,15 @@
+{
+  "name": "oakmega-manual-mcp",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "OakMega 手冊 MCP server（Cloudflare Worker）",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node --test test/"
+  },
+  "devDependencies": {
+    "wrangler": "^4.42.0"
+  }
+}

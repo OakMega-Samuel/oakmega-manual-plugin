@@ -1,0 +1,15 @@
+{
+  "name": "oakmega-manual",
+  "version": "1.0.0",
+  "description": "查詢 OakMega 產品說明手冊。內容以 Notion 為唯一來源，每小時自動同步，透過 MCP server 提供搜尋，客戶端零設定、免登入。",
+  "author": {
+    "name": "OakMega"
+  },
+  "license": "Proprietary",
+  "keywords": [
+    "oakmega",
+    "manual",
+    "docs",
+    "handbook"
+  ]
+}

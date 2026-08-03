@@ -1,0 +1,11 @@
+name = "oakmega-manual-mcp"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+
+# 之後 search_manual 會需要從 GitHub raw 讀 INDEX.json / search.json，
+# 屆時把來源 repo 設在這裡，程式碼就不用寫死。
+[vars]
+CONTENT_BASE_URL = "https://raw.githubusercontent.com/oakmega/oakmega-manual-content/main"
+
+[observability]
+enabled = true

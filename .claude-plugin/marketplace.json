@@ -1,0 +1,16 @@
+{
+  "name": "oakmega-manual",
+  "owner": {
+    "name": "OakMega"
+  },
+  "metadata": {
+    "description": "OakMega 產品說明手冊。裝了就能在 Claude 裡直接問手冊內容，不需登入、不需 API key。"
+  },
+  "plugins": [
+    {
+      "name": "oakmega-manual",
+      "source": "./oakmega-manual",
+      "description": "查詢 OakMega 產品說明手冊。內容以 Notion 為唯一來源，每小時自動同步。"
+    }
+  ]
+}

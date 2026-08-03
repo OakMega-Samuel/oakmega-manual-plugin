@@ -1,0 +1,236 @@
+{
+  "version": 1,
+  "root_page_id": "000000000000000000000000a0000001",
+  "content_last_edited": "2026-05-12T00:00:00.000Z",
+  "page_count": 12,
+  "tree": [
+    {
+      "path": "manual/index.md",
+      "title": "OakMega 使用手冊",
+      "summary": "本手冊說明 OakMega SCRM 平台的各項功能與操作方式。 快速上手 會員管理 推播訊息 成效分析 API 與 Webhook 常見問題",
+      "children": [
+        {
+          "path": "manual/快速上手-a0000002.md",
+          "title": "快速上手",
+          "summary": "第一次使用 OakMega 時，依序完成下列三個步驟即可開始經營會員。 建立 Workspace 綁定 LINE 官方帳號 匯入既有會員名單 建立 Workspace 綁定 LINE 官方帳號",
+          "children": [
+            {
+              "path": "manual/快速上手-a0000002/建立-workspace-a0000003.md",
+              "title": "建立 Workspace",
+              "summary": "Workspace 是 OakMega 的最上層單位，一個品牌對應一個 Workspace。 建立步驟 登入後點選右上角頭像，選擇「新增 Workspace」。 填寫品牌名稱與所屬產業。 選擇方案並完成付款。 注意事項 Workspace 建立後名稱可以修改，但無法刪除，只能停用。 一組 API key 只綁定一個 Workspace，切換 Workspace 需要換 key。",
+              "children": []
+            },
+            {
+              "path": "manual/快速上手-a0000002/綁定-line-官方帳號-a0000004.md",
+              "title": "綁定 LINE 官方帳號",
+              "summary": "綁定後才能收發 LINE 訊息、取得好友資料與推播成效。 綁定步驟 在 LINE Developers 建立 Messaging API channel。 複製 Channel ID 與 Channel Secret 貼到 OakMega 後台。 把 OakMega 提供的 Webhook URL 填回 LINE Developers。 常見錯誤 若 Webhook 驗證失敗，多半是 LINE 後…",
+              "children": []
+            }
+          ]
+        },
+        {
+          "path": "manual/會員管理-a0000005.md",
+          "title": "會員管理",
+          "summary": "會員是所有功能的核心，包含基本資料、渠道綁定與標籤三個部分。 會員來源 LINE 加好友時自動建立 CSV 手動匯入 透過 API 建立 會員合併 同一個人從不同渠道進來時，可以用手機號碼或 Email 進行會員合併。 會員標籤",
+          "children": [
+            {
+              "path": "manual/會員管理-a0000005/會員標籤-a0000006.md",
+              "title": "會員標籤",
+              "summary": "標籤用來標記會員的特徵與行為，是分眾的基礎。 標籤類型 手動標籤：由人員在後台手動貼上 自動標籤：由旅程或自動化規則觸發 系統標籤：平台依行為自動產生，不可編輯 標籤上限 每個 Workspace 最多可以建立 5000 個標籤，單一會員最多貼 200 個標籤。 批次匯入標籤",
+              "children": [
+                {
+                  "path": "manual/會員管理-a0000005/會員標籤-a0000006/批次匯入標籤-a0000007.md",
+                  "title": "批次匯入標籤",
+                  "summary": "需要一次為大量會員貼標時，使用 CSV 批次匯入功能。 CSV 格式 限制 單次匯入上限 10000 筆，超過請分批。檔案大小上限 10 MB。 匯入為非同步作業，筆數多時需要數分鐘，完成後會寄送通知信。",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "manual/推播訊息-a0000008.md",
+          "title": "推播訊息",
+          "summary": "推播用來主動對會員發送訊息，支援文字、圖片、圖文選單與彈性訊息。 推播類型 立即推播：建立後馬上送出 排程推播：指定時間送出 循環推播：依週期重複送出 推播費用 推播則數依 LINE 官方帳號的方案計費，超量會被 LINE 擋下。 分眾推播",
+          "children": [
+            {
+              "path": "manual/推播訊息-a0000008/分眾推播-a0000009.md",
+              "title": "分眾推播",
+              "summary": "分眾推播讓你只對符合條件的會員發送訊息，避免打擾不相關的人。 可用的分眾條件 標籤：包含或不包含指定標籤 會員欄位：性別、生日、註冊時間等 行為：最近是否開啟訊息、是否點擊連結 預估受眾 設定條件後系統會即時估算受眾人數，送出前務必確認。 受眾為零時無法送出，請放寬條件。",
+              "children": []
+            }
+          ]
+        },
+        {
+          "path": "manual/成效分析-a000000a.md",
+          "title": "成效分析",
+          "summary": "分析頁提供好友成長、訊息互動與轉換三大類數據。 好友成長 顯示每日新增與封鎖人數，可切換週期比較。 訊息互動 推播的送達率、開封率與點擊率，資料在送出後六小時內陸續回填。 資料延遲 LINE 的成效資料有延遲，當日數據約在隔日凌晨才會完整。",
+          "children": []
+        },
+        {
+          "path": "manual/api-與-webhook-a000000b.md",
+          "title": "API 與 Webhook",
+          "summary": "OakMega 提供 REST API 讓你把會員資料串接到自家系統。 認證方式 所有請求都要在 header 帶上 Authorization: Bearer <API key>。 速率限制 每分鐘 600 次請求，超過回傳 429，請依 Retry-After 重試。 Webhook 事件 member.created：會員建立 member.tagged：會員被貼上標籤 message.de…",
+          "children": []
+        },
+        {
+          "path": "manual/常見問題-a000000c.md",
+          "title": "常見問題",
+          "summary": "忘記密碼怎麼辦 在登入頁點選「忘記密碼」，系統會寄送重設連結到註冊信箱，連結一小時內有效。 可以匯出會員資料嗎 可以，在會員列表點選「匯出」，系統會產生 CSV 並寄到你的信箱。 為什麼推播沒有送達 最常見的原因是對方已封鎖官方帳號，其次是 LINE 推播額度用盡。",
+          "children": []
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "path": "manual/index.md",
+      "title": "OakMega 使用手冊",
+      "breadcrumb": [
+        "OakMega 使用手冊"
+      ],
+      "depth": 0,
+      "summary": "本手冊說明 OakMega SCRM 平台的各項功能與操作方式。 快速上手 會員管理 推播訊息 成效分析 API 與 Webhook 常見問題",
+      "notion_url": "https://www.notion.so/000000000000000000000000a0000001",
+      "last_edited_time": "2026-05-01T00:00:00.000Z"
+    },
+    {
+      "path": "manual/快速上手-a0000002.md",
+      "title": "快速上手",
+      "breadcrumb": [
+        "OakMega 使用手冊",
+        "快速上手"
+      ],
+      "depth": 1,
+      "summary": "第一次使用 OakMega 時，依序完成下列三個步驟即可開始經營會員。 建立 Workspace 綁定 LINE 官方帳號 匯入既有會員名單 建立 Workspace 綁定 LINE 官方帳號",
+      "notion_url": "https://www.notion.so/000000000000000000000000a0000002",
+      "last_edited_time": "2026-05-02T00:00:00.000Z"
+    },
+    {
+      "path": "manual/快速上手-a0000002/建立-workspace-a0000003.md",
+      "title": "建立 Workspace",
+      "breadcrumb": [
+        "OakMega 使用手冊",
+        "快速上手",
+        "建立 Workspace"
+      ],
+      "depth": 2,
+      "summary": "Workspace 是 OakMega 的最上層單位，一個品牌對應一個 Workspace。 建立步驟 登入後點選右上角頭像，選擇「新增 Workspace」。 填寫品牌名稱與所屬產業。 選擇方案並完成付款。 注意事項 Workspace 建立後名稱可以修改，但無法刪除，只能停用。 一組 API key 只綁定一個 Workspace，切換 Workspace 需要換 key。",
+      "notion_url": "https://www.notion.so/000000000000000000000000a0000003",
+      "last_edited_time": "2026-05-03T00:00:00.000Z"
+    },
+    {
+      "path": "manual/快速上手-a0000002/綁定-line-官方帳號-a0000004.md",
+      "title": "綁定 LINE 官方帳號",
+      "breadcrumb": [
+        "OakMega 使用手冊",
+        "快速上手",
+        "綁定 LINE 官方帳號"
+      ],
+      "depth": 2,
+      "summary": "綁定後才能收發 LINE 訊息、取得好友資料與推播成效。 綁定步驟 在 LINE Developers 建立 Messaging API channel。 複製 Channel ID 與 Channel Secret 貼到 OakMega 後台。 把 OakMega 提供的 Webhook URL 填回 LINE Developers。 常見錯誤 若 Webhook 驗證失敗，多半是 LINE 後…",
+      "notion_url": "https://www.notion.so/000000000000000000000000a0000004",
+      "last_edited_time": "2026-05-04T00:00:00.000Z"
+    },
+    {
+      "path": "manual/會員管理-a0000005.md",
+      "title": "會員管理",
+      "breadcrumb": [
+        "OakMega 使用手冊",
+        "會員管理"
+      ],
+      "depth": 1,
+      "summary": "會員是所有功能的核心，包含基本資料、渠道綁定與標籤三個部分。 會員來源 LINE 加好友時自動建立 CSV 手動匯入 透過 API 建立 會員合併 同一個人從不同渠道進來時，可以用手機號碼或 Email 進行會員合併。 會員標籤",
+      "notion_url": "https://www.notion.so/000000000000000000000000a0000005",
+      "last_edited_time": "2026-05-05T00:00:00.000Z"
+    },
+    {
+      "path": "manual/會員管理-a0000005/會員標籤-a0000006.md",
+      "title": "會員標籤",
+      "breadcrumb": [
+        "OakMega 使用手冊",
+        "會員管理",
+        "會員標籤"
+      ],
+      "depth": 2,
+      "summary": "標籤用來標記會員的特徵與行為，是分眾的基礎。 標籤類型 手動標籤：由人員在後台手動貼上 自動標籤：由旅程或自動化規則觸發 系統標籤：平台依行為自動產生，不可編輯 標籤上限 每個 Workspace 最多可以建立 5000 個標籤，單一會員最多貼 200 個標籤。 批次匯入標籤",
+      "notion_url": "https://www.notion.so/000000000000000000000000a0000006",
+      "last_edited_time": "2026-05-06T00:00:00.000Z"
+    },
+    {
+      "path": "manual/會員管理-a0000005/會員標籤-a0000006/批次匯入標籤-a0000007.md",
+      "title": "批次匯入標籤",
+      "breadcrumb": [
+        "OakMega 使用手冊",
+        "會員管理",
+        "會員標籤",
+        "批次匯入標籤"
+      ],
+      "depth": 3,
+      "summary": "需要一次為大量會員貼標時，使用 CSV 批次匯入功能。 CSV 格式 限制 單次匯入上限 10000 筆，超過請分批。檔案大小上限 10 MB。 匯入為非同步作業，筆數多時需要數分鐘，完成後會寄送通知信。",
+      "notion_url": "https://www.notion.so/000000000000000000000000a0000007",
+      "last_edited_time": "2026-05-07T00:00:00.000Z"
+    },
+    {
+      "path": "manual/推播訊息-a0000008.md",
+      "title": "推播訊息",
+      "breadcrumb": [
+        "OakMega 使用手冊",
+        "推播訊息"
+      ],
+      "depth": 1,
+      "summary": "推播用來主動對會員發送訊息，支援文字、圖片、圖文選單與彈性訊息。 推播類型 立即推播：建立後馬上送出 排程推播：指定時間送出 循環推播：依週期重複送出 推播費用 推播則數依 LINE 官方帳號的方案計費，超量會被 LINE 擋下。 分眾推播",
+      "notion_url": "https://www.notion.so/000000000000000000000000a0000008",
+      "last_edited_time": "2026-05-08T00:00:00.000Z"
+    },
+    {
+      "path": "manual/推播訊息-a0000008/分眾推播-a0000009.md",
+      "title": "分眾推播",
+      "breadcrumb": [
+        "OakMega 使用手冊",
+        "推播訊息",
+        "分眾推播"
+      ],
+      "depth": 2,
+      "summary": "分眾推播讓你只對符合條件的會員發送訊息，避免打擾不相關的人。 可用的分眾條件 標籤：包含或不包含指定標籤 會員欄位：性別、生日、註冊時間等 行為：最近是否開啟訊息、是否點擊連結 預估受眾 設定條件後系統會即時估算受眾人數，送出前務必確認。 受眾為零時無法送出，請放寬條件。",
+      "notion_url": "https://www.notion.so/000000000000000000000000a0000009",
+      "last_edited_time": "2026-05-09T00:00:00.000Z"
+    },
+    {
+      "path": "manual/成效分析-a000000a.md",
+      "title": "成效分析",
+      "breadcrumb": [
+        "OakMega 使用手冊",
+        "成效分析"
+      ],
+      "depth": 1,
+      "summary": "分析頁提供好友成長、訊息互動與轉換三大類數據。 好友成長 顯示每日新增與封鎖人數，可切換週期比較。 訊息互動 推播的送達率、開封率與點擊率，資料在送出後六小時內陸續回填。 資料延遲 LINE 的成效資料有延遲，當日數據約在隔日凌晨才會完整。",
+      "notion_url": "https://www.notion.so/000000000000000000000000a000000a",
+      "last_edited_time": "2026-05-10T00:00:00.000Z"
+    },
+    {
+      "path": "manual/api-與-webhook-a000000b.md",
+      "title": "API 與 Webhook",
+      "breadcrumb": [
+        "OakMega 使用手冊",
+        "API 與 Webhook"
+      ],
+      "depth": 1,
+      "summary": "OakMega 提供 REST API 讓你把會員資料串接到自家系統。 認證方式 所有請求都要在 header 帶上 Authorization: Bearer <API key>。 速率限制 每分鐘 600 次請求，超過回傳 429，請依 Retry-After 重試。 Webhook 事件 member.created：會員建立 member.tagged：會員被貼上標籤 message.de…",
+      "notion_url": "https://www.notion.so/000000000000000000000000a000000b",
+      "last_edited_time": "2026-05-11T00:00:00.000Z"
+    },
+    {
+      "path": "manual/常見問題-a000000c.md",
+      "title": "常見問題",
+      "breadcrumb": [
+        "OakMega 使用手冊",
+        "常見問題"
+      ],
+      "depth": 1,
+      "summary": "忘記密碼怎麼辦 在登入頁點選「忘記密碼」，系統會寄送重設連結到註冊信箱，連結一小時內有效。 可以匯出會員資料嗎 可以，在會員列表點選「匯出」，系統會產生 CSV 並寄到你的信箱。 為什麼推播沒有送達 最常見的原因是對方已封鎖官方帳號，其次是 LINE 推播額度用盡。",
+      "notion_url": "https://www.notion.so/000000000000000000000000a000000c",
+      "last_edited_time": "2026-05-12T00:00:00.000Z"
+    }
+  ]
+}

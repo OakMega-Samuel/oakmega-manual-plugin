@@ -132,7 +132,19 @@ Server 本身沒問題，不用再往這個方向查：
 - `initialize` / `tools/list` / `tools/call` 線上實測皆正常
 - 回應的 Content-Type 已與已知可用的 connector 完全一致
 
-### 還沒驗的
+### 架構已改：不再走 MCP
 
-**直接加 custom connector**（側邊欄 Connectors，非 plugin 分頁）。
-這才是原本定義的 gate，也是唯一還能驗證 #402 的路徑。
+Team 方案要加 custom connector 得先過 owner 審核，對一份要推廣給客戶的手冊
+等於死路。因此客戶路徑改成**讓 Claude 用網頁抓取直接讀公開 GitHub repo**：
+
+    plugin 的 skill  →  抓 INDEX.md  →  依它的指示抓 MANUAL.md 或單頁
+
+上面那些 MCP 的坑仍然值得留著——Worker 保留給內部 Claude Code 使用者，
+而且如果哪天 connector 的門檻降低，隨時可以再啟用。
+
+**新的 gate**：Claude 在 claude.ai 能不能 fetch raw.githubusercontent.com。
+用現有的 public repo 就能測，不必等內容 repo：
+
+    抓取並摘要 https://raw.githubusercontent.com/OakMega-Samuel/oakmega-manual-plugin/main/oakmega-manual/skills/manual-lookup/SKILL.md
+
+抓得到 → 整條路成立。抓不到 → 只能做 Claude Code。

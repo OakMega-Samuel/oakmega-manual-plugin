@@ -8,26 +8,15 @@
 
 ## 安裝
 
-### Claude（Cowork / claude.ai / 桌面 app）
-
-需要兩步。**兩步都要做**——只裝 plugin 的話 Claude 知道該查手冊卻沒有工具可用。
-
-**第一步：加 connector（拿到三個 tool）**
-
-1. **Customize** → **Connectors** → **Add custom connector**
-2. 貼上 `https://oakmega-manual-mcp.samuel-jeng.workers.dev/mcp`
-
-> 走側邊欄的 **Connectors**，不要走 plugin 詳情頁裡的 Connectors 分頁——
-> 那個分頁的 Install 按鈕目前按了沒反應（詳見 SPIKE.md）。
-
-**第二步：裝 plugin（拿到 manual-lookup skill）**
+### Claude（claude.ai / Cowork / 桌面 app）
 
 1. **Customize** → **Plugins**
 2. **Personal plugins** 按 `+` → **Add marketplace**
 3. 填入 `OakMega-Samuel/oakmega-manual-plugin`
 4. 找到 **oakmega-manual**，按 **Install**
 
-skill 的作用是告訴 Claude 何時該查手冊、以及不要憑記憶編造產品細節。
+就這樣。**不需要加 connector、不需要登入、不需要管理員審核。**
+手冊放在公開的 GitHub repo，Claude 直接用網頁抓取讀它。
 
 ### Claude Code
 
@@ -39,11 +28,17 @@ claude plugin marketplace add OakMega-Samuel/oakmega-manual-plugin
 claude plugin install oakmega-manual@oakmega-manual
 ```
 
-### 只想接 MCP、不裝 plugin
+### 進階：接 MCP server（選用，檢索品質較好）
+
+內部使用 Claude Code 的同事可以額外接上 MCP server。它在 server 端跑 BM25 排序，
+只回相關片段，比讓模型自己看目錄挑更準、也更省 context：
 
 ```bash
 claude mcp add --transport http oakmega-manual https://oakmega-manual-mcp.samuel-jeng.workers.dev/mcp
 ```
+
+客戶不需要這個——Team 方案要加 custom connector 得過 owner 審核，
+對推廣手冊來說門檻太高，所以客戶路徑走的是公開 repo 直接抓取。
 
 ---
 
@@ -64,11 +59,14 @@ Claude 會自己查手冊、引用內容，並附上 Notion 原文連結讓你�
 
 | 元件 | 說明 |
 |---|---|
-| `oakmega-manual/.mcp.json` | 宣告手冊 MCP server，裝 plugin 時自動接上 |
-| `oakmega-manual/skills/manual-lookup/` | 教 Claude 何時該查手冊、以及不要憑記憶回答 |
-| `worker/` | MCP server 本體（Cloudflare Worker），提供三個 tool |
+| `oakmega-manual/skills/manual-lookup/` | **客戶路徑的全部**。教 Claude 從公開 repo 抓手冊、以及不要憑記憶回答 |
+| `oakmega-manual/.mcp.json` | 宣告 MCP server。只在 Claude Code / Cowork 生效，claude.ai 用不到 |
+| `worker/` | MCP server 本體（Cloudflare Worker），選用路徑 |
 
-三個 tool：
+內容取用方式（skill 驅動）：先抓 `INDEX.md` 這份目錄，它會依手冊大小告訴模型
+要直接抓 `MANUAL.md` 全文、還是挑單頁抓。所有網址都是完整的，模型不用自己拼。
+
+MCP server 的三個 tool（選用路徑）：
 
 | Tool | 用途 |
 |---|---|
